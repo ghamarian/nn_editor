@@ -507,7 +507,11 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                 return d === state.selectedEdge;
             })
             .attr("d", function (d) {
-                return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+                if (d.source.x < d.target.x)
+                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius)  + "," + d.target.y;
+                else {
+                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius)  + "," + d.target.y;
+                }
             });
 
         // add new paths
@@ -534,7 +538,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             return d.id;
         });
         thisGraph.circles.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
+            return "translate(" +  d.x + "," + d.y + ")";
         });
 
         // add new nodes
@@ -567,12 +571,10 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         newGs.append('rect')
             .attr("rx", 6)
             .attr("ry", 6)
-            .attr("x", d => - consts.nodeRadius)
-            .attr("y", d => - consts.nodeRadius)
-            .attr("width", String(2 * consts.nodeRadius))
-            .attr("height", String(2 * consts.nodeRadius))
-            .attr('fill', 'white')
-            .attr('stroke', 'black');
+            .attr("x", d => - 2 * consts.nodeRadius)
+            .attr("y", d => -consts.nodeRadius)
+            .attr("width",  String(4 * consts.nodeRadius))
+            .attr("height", String(2 * consts.nodeRadius));
 
         newGs.each(function (d) {
             thisGraph.insertTitleLinebreaks(d3.select(this), d.title);
