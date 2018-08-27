@@ -303,7 +303,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     GraphCreator.prototype.pathMouseDown = function (d3path, d) {
         let thisGraph = this,
             state = thisGraph.state;
-        d3.event.stopPropagation();
+        // d3.event.stopPropagation();
         state.mouseDownLink = d;
 
         if (state.selectedNode) {
@@ -322,7 +322,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     GraphCreator.prototype.circleMouseDown = function (d3node, d) {
         let thisGraph = this,
             state = thisGraph.state;
-        d3.event.stopPropagation();
+        // d3.event.stopPropagation();
         state.mouseDownNode = d;
         console.log(`mousedownnode = ${JSON.stringify(d)}`);
         if (d3.event.shiftKey) {
@@ -533,12 +533,23 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             })
             // .attr("d", line([d.source.x, d.source.y, d.target.x, d.target.y]));
             .attr("d", function (d) {
-
+                var da = [];
+                var middle = {x:(d.source.x + d.target.x)/2, y: (d.source.y + d.target.y)/1.7};
                 if (d.source.x < d.target.x)
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius) + "," + d.target.y;
+                    da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x - consts.nodeRadius) , y: d.target.y}];
                 else {
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius) + "," + d.target.y;
+                    da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x + consts.nodeRadius) , y: d.target.y}];
                 }
+
+                console.log(Math.abs(d.source.x - d.target.x));
+                if (Math.abs(d.source.x - d.target.x) > 300) {
+                    da.splice(1, 0, middle);
+                }
+
+                console.log(da.length);
+
+                var myline = d3.line().curve(d3.curveMonotoneX).x(d => d.x).y(d => d.y);
+                return myline(da);
             });
 
         // remove old links
@@ -550,11 +561,23 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .style('marker-end', 'url(#end-arrow)')
             .classed("link", true)
             .attr("d", function (d) {
+                var da = [];
+                var middle = {x:(d.source.x + d.target.x)/2, y: (d.source.y + d.target.y)/1.7};
                 if (d.source.x < d.target.x)
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius) + "," + d.target.y;
+                    da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x - consts.nodeRadius) , y: d.target.y}];
                 else {
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius) + "," + d.target.y;
+                    da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x + consts.nodeRadius) , y: d.target.y}];
                 }
+
+                console.log(Math.abs(d.source.x - d.target.x));
+                if (Math.abs(d.source.x - d.target.x) > 300) {
+                    da.splice(1, 0, middle);
+                }
+
+                console.log(da.length);
+
+                var myline = d3.line().curve(d3.curveMonotoneX).x(d => d.x).y(d => d.y);
+                return myline(da);
             })
             .merge(paths)
             .on("mouseup", function (d) {
