@@ -87,36 +87,37 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             });
         svg.on("mousedown", function (d) {
             thisGraph.svgMouseDown.call(thisGraph, d);
-            console.log('svg mouse down');
+            if (d3.event.shiftKey){
+                d3.event.stopImmediatePropagation();
+            }
         });
         svg.on("mouseup", function (d) {
-            console.log('svg mouseup');
             thisGraph.svgMouseUp.call(thisGraph, d);
         });
 
         // listen for dragging
-        // let dragSvg = d3.zoom()
-        //     .on("zoom", function () {
-        //         if (d3.event.sourceEvent.shiftKey) {
-        //             // TODO  the internal d3 state is still changing
-        //             return false;
-        //         } else {
-        //             thisGraph.zoomed.call(thisGraph);
-        //         }
-        //         return true;
-        //     })
-        //     .on("start", function () {
-        //         var ael = d3.select("#" + thisGraph.consts.activeEditId).node();
-        //         if (ael) {
-        //             ael.blur();
-        //         }
-        //         if (!d3.event.sourceEvent.shiftKey) d3.select('body').style("cursor", "move");
-        //     })
-        //     .on("end", function () {
-        //         d3.select('body').style("cursor", "auto");
-        //     });
-        //
-        // svg.call(dragSvg).on("dblclick.zoom", null);
+        let dragSvg = d3.zoom()
+            .on("zoom", function () {
+                if (d3.event.sourceEvent.shiftKey) {
+                    // TODO  the internal d3 state is still changing
+                    return false;
+                } else {
+                    thisGraph.zoomed.call(thisGraph);
+                }
+                return true;
+            })
+            .on("start", function () {
+                var ael = d3.select("#" + thisGraph.consts.activeEditId).node();
+                if (ael) {
+                    ael.blur();
+                }
+                if (!d3.event.sourceEvent.shiftKey) d3.select('body').style("cursor", "move");
+            })
+            .on("end", function () {
+                d3.select('body').style("cursor", "auto");
+            });
+
+        svg.call(dragSvg).on("dblclick.zoom", null);
 
         // listen for resize
         window.onresize = function () {
@@ -302,6 +303,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     GraphCreator.prototype.pathMouseDown = function (d3path, d) {
         let thisGraph = this,
             state = thisGraph.state;
+        d3.event.stopPropagation();
         state.mouseDownLink = d;
 
         if (state.selectedNode) {
@@ -320,6 +322,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     GraphCreator.prototype.circleMouseDown = function (d3node, d) {
         let thisGraph = this,
             state = thisGraph.state;
+        d3.event.stopPropagation();
         state.mouseDownNode = d;
         console.log(`mousedownnode = ${JSON.stringify(d)}`);
         if (d3.event.shiftKey) {
@@ -355,7 +358,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .attr("contentEditable", "true")
             .text(d.title)
             .on("mousedown", function (d) {
-                // d3.event.stopPropagation();
+                d3.event.stopPropagation();
             })
             .on("keydown", function (d) {
                 d3.event.stopPropagation();
@@ -389,7 +392,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         }
 
         thisGraph.dragLine.classed("hidden", true);
-        
+
         if (!mouseDownNode || !mouseEnterNode) return;
 
 
@@ -532,9 +535,9 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .attr("d", function (d) {
 
                 if (d.source.x < d.target.x)
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius)  + "," + d.target.y;
+                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius) + "," + d.target.y;
                 else {
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius)  + "," + d.target.y;
+                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius) + "," + d.target.y;
                 }
             });
 
@@ -548,9 +551,9 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .classed("link", true)
             .attr("d", function (d) {
                 if (d.source.x < d.target.x)
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius)  + "," + d.target.y;
+                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x - consts.nodeRadius) + "," + d.target.y;
                 else {
-                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius)  + "," + d.target.y;
+                    return "M" + d.source.x + "," + d.source.y + "L" + (d.target.x + consts.nodeRadius) + "," + d.target.y;
                 }
             })
             .merge(paths)
@@ -574,7 +577,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         thisGraph.circles.exit().remove();
 
         thisGraph.circles.attr("transform", function (d) {
-            return "translate(" +  d.x + "," + d.y + ")";
+            return "translate(" + d.x + "," + d.y + ")";
         });
 
 
@@ -612,9 +615,9 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         newGs.append('rect')
             .attr("rx", 6)
             .attr("ry", 6)
-            .attr("x", d => - 2 * consts.nodeRadius)
+            .attr("x", d => -2 * consts.nodeRadius)
             .attr("y", d => -consts.nodeRadius)
-            .attr("width",  String(4 * consts.nodeRadius))
+            .attr("width", String(4 * consts.nodeRadius))
             .attr("height", String(2 * consts.nodeRadius));
 
         newGs.each(function (d) {
@@ -626,7 +629,8 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     GraphCreator.prototype.zoomed = function () {
         this.state.justScaleTransGraph = true;
         d3.select("." + this.consts.graphClass)
-            .attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+            // .attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+             .attr("transform", d3.event.transform);
     };
 
     GraphCreator.prototype.updateWindow = function (svg) {
