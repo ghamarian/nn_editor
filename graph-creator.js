@@ -388,9 +388,10 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             state.justDragged = false;
         }
 
+        thisGraph.dragLine.classed("hidden", true);
+        
         if (!mouseDownNode || !mouseEnterNode) return;
 
-        thisGraph.dragLine.classed("hidden", true);
 
         if (mouseDownNode !== d) {
             // we're in a different node: create new edge for mousedown edge and add to graph
@@ -592,6 +593,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                 }
             })
             .on("mouseout", function (d) {
+                state.mouseEnterNode = null;
                 d3.select(this).classed(consts.connectClass, false);
             })
             .on("mousedown", function (d) {
