@@ -541,12 +541,10 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                     da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x + consts.nodeRadius) , y: d.target.y}];
                 }
 
-                console.log(Math.abs(d.source.x - d.target.x));
                 if (Math.abs(d.source.x - d.target.x) > 300) {
                     da.splice(1, 0, middle);
                 }
 
-                console.log(da.length);
 
                 var myline = d3.line().curve(d3.curveMonotoneX).x(d => d.x).y(d => d.y);
                 return myline(da);
@@ -569,13 +567,9 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                     da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x + consts.nodeRadius) , y: d.target.y}];
                 }
 
-                console.log(Math.abs(d.source.x - d.target.x));
                 if (Math.abs(d.source.x - d.target.x) > 300) {
                     da.splice(1, 0, middle);
                 }
-
-                console.log(da.length);
-
                 var myline = d3.line().curve(d3.curveMonotoneX).x(d => d.x).y(d => d.y);
                 return myline(da);
             })
