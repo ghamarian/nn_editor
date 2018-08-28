@@ -694,11 +694,17 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     d3.selectAll("button").on("click", function (e) {
         var k = d3.select(this);
         selected_item  = (k.nodes()[0].textContent);
-        if (d3.selectAll(".active").nodes[0] === selected_item) {
+        var activeNode = d3.selectAll(".active").nodes();
+        if (activeNode && activeNode.length > 0 && activeNode[0].textContent === selected_item) {
             k.classed("active", false);
         }
-        d3.selectAll('.active').classed('active', false);
-        k.classed("active", true);
+        else if (activeNode.length == 0) {
+            k.classed("active", true);
+        }
+        else {
+            d3.selectAll('.active').classed('active', false);
+            k.classed("active", true);
+        }
     });
 
 })(window.d3, window.saveAs, window.Blob);
