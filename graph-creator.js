@@ -22,6 +22,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             selectedText: null
         };
 
+
         // define arrow markers for graph links
         let defs = svg.append('svg:defs');
         defs.append('svg:marker')
@@ -282,6 +283,8 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             thisGraph.removeSelectFromNode();
         }
         thisGraph.state.selectedNode = nodeData;
+
+        $('.properties label').text(JSON.stringify(nodeData));
     };
 
     GraphCreator.prototype.removeSelectFromNode = function () {
@@ -324,7 +327,6 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             state = thisGraph.state;
         // d3.event.stopPropagation();
         state.mouseDownNode = d;
-        console.log(`mousedownnode = ${JSON.stringify(d)}`);
         if (d3.event.shiftKey) {
             state.shiftNodeDrag = d3.event.shiftKey;
             // reposition dragged directed edge
@@ -375,7 +377,6 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     };
 
     GraphCreator.prototype.dragEnd = function (d3node, d) {
-        console.log('dragend');
         let thisGraph = this,
             state = thisGraph.state,
             consts = thisGraph.consts;
@@ -419,7 +420,6 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
 
     // mouseup on nodes
     GraphCreator.prototype.circleMouseUp = function (d3node, d) {
-        console.log('mouse up');
         let thisGraph = this,
             state = thisGraph.state,
             consts = thisGraph.consts;
@@ -463,7 +463,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         } else if (state.graphMouseDown && d3.event.shiftKey) {
             // clicked not dragged from svg
             let xycoords = d3.mouse(thisGraph.svgG.node()),
-                d = {id: thisGraph.idct++, title: "new concept", x: xycoords[0], y: xycoords[1]};
+                d = {id: thisGraph.idct++, title: selected_item, x: xycoords[0], y: xycoords[1]};
             thisGraph.nodes.push(d);
             thisGraph.updateGraph();
             // make title of text immediently editable
@@ -541,9 +541,9 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                     da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x + consts.nodeRadius) , y: d.target.y}];
                 }
 
-                if (Math.abs(d.source.x - d.target.x) > 300) {
-                    da.splice(1, 0, middle);
-                }
+                // if (Math.abs(d.source.x - d.target.x) > 300) {
+                //     da.splice(1, 0, middle);
+                // }
 
 
                 var myline = d3.line().curve(d3.curveMonotoneX).x(d => d.x).y(d => d.y);
@@ -567,15 +567,14 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                     da = [{x: d.source.x, y: d.source.y}, {x: (d.target.x + consts.nodeRadius) , y: d.target.y}];
                 }
 
-                if (Math.abs(d.source.x - d.target.x) > 300) {
-                    da.splice(1, 0, middle);
-                }
+                // if (Math.abs(d.source.x - d.target.x) > 300) {
+                //     da.splice(1, 0, middle);
+                // }
                 var myline = d3.line().curve(d3.curveMonotoneX).x(d => d.x).y(d => d.y);
                 return myline(da);
             })
             .merge(paths)
             .on("mouseup", function (d) {
-                console.log('mouseup link');
                 // state.mouseDownLink = null;
             })
             .on("mousedown", function (d) {
@@ -682,10 +681,24 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
 
 
     /** MAIN SVG **/
-    let svg = d3.select("body").append("svg")
-        .attr("width", width)
+    let svg = d3.select(".svg-container").append("svg")
+        .attr('viewBox', `87 0 ${width - 300} ${height}`)
+        .attr("width", width - 300)
         .attr("height", height);
     let graph = new GraphCreator(svg, nodes, edges);
     graph.setIdCt(2);
     graph.updateGraph();
+
+    var selected_item = "";
+
+    d3.selectAll("button").on("click", function (e) {
+        var k = d3.select(this);
+        selected_item  = (k.nodes()[0].textContent);
+        if (d3.selectAll(".active").nodes[0] === selected_item) {
+            k.classed("active", false);
+        }
+        d3.selectAll('.active').classed('active', false);
+        k.classed("active", true);
+    });
+
 })(window.d3, window.saveAs, window.Blob);

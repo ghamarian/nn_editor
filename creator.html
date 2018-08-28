@@ -1,19 +1,43 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <link rel="stylesheet" href="graph-creator.css" />
-  </head>
+<head>
+    <link rel="stylesheet" href="graph-creator.css"/>
+</head>
 
-  <body>
+<body>
 
-    <div id="toolbox">
-      <input type="file" id="hidden-file-upload"><input id="upload-input" type="image" title="upload graph" src="upload-icon.png" alt="upload graph"> <input type="image" id="download-input" title="download graph" src="download-icon.png" alt="download graph"> <input type="image" id="delete-graph" title="delete graph" src="trash-icon.png" alt="delete graph">
+<!--<div id="toolbox">-->
+<!--<input type="file" id="hidden-file-upload">-->
+<!--<input id="upload-input" type="image" title="upload graph" src="upload-icon.png" alt="upload graph">-->
+<!--<input type="image" id="download-input" title="download graph" src="download-icon.png" alt="download graph"> -->
+<!--<input type="image" id="delete-graph" title="delete graph" src="trash-icon.png" alt="delete graph">-->
+<!--</div>-->
+
+<!--<div class="buttonbar">-->
+<div class="container">
+    <div class="buttonbar">
+        <button type="button" class="layer" name="input">Input</button>
+        <button type="button" class="layer" name="mlp">Fully connected</button>
+        <button type="button" class="layer" name="softmax">Softmax</button>
+        <button type="button" class="layer" name="cnn">Convolutional layer</button>
+        <button type="button" class="layer" name="concat">concat</button>
     </div>
 
-    <!--<script src="//d3js.org/d3.v3.js" charset="utf-8"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js" charset="utf-8"></script>
-    <script src="//cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
-    <script src="graph-creator.js"></script>
-  </body>
+    <div class="svg-container"> </div>
+
+    <div class="properties">
+        <label></label>
+    </div>
+</div>
+
+<!--<script src="//d3js.org/d3.v3.js" charset="utf-8"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js" charset="utf-8"></script>
+<script src="//cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+<script src="graph-creator.js"></script>
+</body>
 
 </html>

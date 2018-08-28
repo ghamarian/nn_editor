@@ -96,3 +96,44 @@ path.link.hidden{
 path.link.selected {
     stroke: rgb(229, 172, 247);
 }
+
+.buttonbar {
+    display: flex;
+    text-align: center;
+    height: 100%;
+    width: 10%;
+    flex-direction: column;
+    border: 3px solid red;
+}
+
+.layer {
+    height: 5vh;
+}
+
+.container {
+    display: flex;
+    border: 3px solid pink;
+}
+
+.svg-container {
+   display: flex;
+   flex-direction: column;;
+   border: 3px solid blue;
+}
+
+.active {
+    color: red;
+}
+
+.properties {
+    display: flex;
+    flex-direction: column;;
+    border: 3px solid black;
+    height: 100%;
+    with: 100px;
+}
+
+.selected {
+    height: 100px;
+    width: 100px;
+}
