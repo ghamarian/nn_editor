@@ -137,3 +137,8 @@ path.link.selected {
     height: 100px;
     width: 100px;
 }
+
+.buttonbar div {
+    display: flex;
+}
+

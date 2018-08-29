@@ -13,17 +13,28 @@
 <!--<input type="image" id="delete-graph" title="delete graph" src="trash-icon.png" alt="delete graph">-->
 <!--</div>-->
 
-<!--<div class="buttonbar">-->
 <div class="container">
-    <div class="buttonbar">
-        <button type="button" class="layer" name="input">Input</button>
-        <button type="button" class="layer" name="mlp">Fully connected</button>
-        <button type="button" class="layer" name="softmax">Softmax</button>
-        <button type="button" class="layer" name="cnn">Convolutional layer</button>
-        <button type="button" class="layer" name="concat">concat</button>
-    </div>
+    <form class="buttonbar">
+        <div>
+            <input type="radio" id="mlp"
+                   name="node" value="mlp">
+            <label for="mlp">Fully connected</label>
+        </div>
 
-    <div class="svg-container"> </div>
+        <div>
+            <input type="radio" id="input"
+                   name="node" value="input">
+            <label for="input">Input</label>
+        </div>
+
+        <div>
+            <input type="radio" id="cnn"
+                   name="node" value="cnn">
+            <label for="cnn">Convolutional layer</label>
+        </div>
+    </form>
+
+    <div class="svg-container"></div>
 
     <div class="properties">
         <label></label>

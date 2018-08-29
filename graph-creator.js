@@ -463,6 +463,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         } else if (state.graphMouseDown && d3.event.shiftKey) {
             // clicked not dragged from svg
             let xycoords = d3.mouse(thisGraph.svgG.node()),
+                selected_item = d3.select('input[name="node"]:checked').node().value,
                 d = {id: thisGraph.idct++, title: selected_item, x: xycoords[0], y: xycoords[1]};
             thisGraph.nodes.push(d);
             thisGraph.updateGraph();
@@ -688,23 +689,5 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
     let graph = new GraphCreator(svg, nodes, edges);
     graph.setIdCt(2);
     graph.updateGraph();
-
-    var selected_item = "";
-
-    d3.selectAll("button").on("click", function (e) {
-        var k = d3.select(this);
-        selected_item  = (k.nodes()[0].textContent);
-        var activeNode = d3.selectAll(".active").nodes();
-        if (activeNode && activeNode.length > 0 && activeNode[0].textContent === selected_item) {
-            k.classed("active", false);
-        }
-        else if (activeNode.length == 0) {
-            k.classed("active", true);
-        }
-        else {
-            d3.selectAll('.active').classed('active', false);
-            k.classed("active", true);
-        }
-    });
 
 })(window.d3, window.saveAs, window.Blob);
